@@ -10,6 +10,7 @@ import { Skeleton } from 'antd';
 import React from "react";
 
 import { Row, Card} from "antd";
+import axios from "axios";
 
 
 const { Search } = Input;
@@ -22,15 +23,30 @@ class App extends Component{
     this.onSearch = this.onSearch.bind(this)
     this.state={
       placeholder: "Query",
-      search: false
+      search: false,
+      phoneDetails: []
     }
   }
-  onSearch(value){
-    console.log(value)
+  onSearch(value)
+  {
     this.setState({
       placeholder: "Query",
       search: true
     })
+    axios
+      .request({
+        method: "post",
+        url: "http://localhost:5000/tf",
+        params: {
+          query: value
+        }
+      })
+      .then((response) => {
+          console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
   }
 
   render (){
@@ -96,8 +112,8 @@ class App extends Component{
         <h1 style={{display:'inline',fontSize:'2.5em'}}>GSM Engine</h1>
         <h4 style={{display:'inline',paddingLeft:"10px"}}>Phone recommender</h4>
     </Header>
-    <Content className="site-layout" style={{ padding: '0 50px', marginTop: 64 }}>
-      <div className="site-layout-background" style={{ padding: 24, minHeight: 380 }}>
+    <Content className="site-layout" style={{ padding: '0 50px', marginTop: 64,  minHeight: '100%' }}>
+      <div className="site-layout-background" style={{ padding: 24}}>
       <Search style={{display:'inline'}} placeholder={this.state.placeholder} allowClear onSearch={this.onSearch} enterButton></Search>
       {content}
       </div>
