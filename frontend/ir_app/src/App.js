@@ -16,7 +16,7 @@ import axios from "axios";
 const { Search } = Input;
 const { Header, Content} = Layout;
 
-
+let mobiles = []
 class App extends Component{
   constructor(props){
     super(props)
@@ -42,7 +42,23 @@ class App extends Component{
         }
       })
       .then((response) => {
-          console.log(response.data);
+          let data = response.data.name
+          console.log(data)
+         for(let i=0;i<data.length;i++)
+          {
+            let temp = {}
+            temp = {
+              id: i,
+              title: data[i][0],
+              description: data[i][1]
+            }
+            console.log(temp)
+            mobiles.push(temp)
+          }
+          this.setState({
+            phoneDetails: mobiles
+          })
+         // console.log(this.state.phoneDetails)
       })
       .catch((error) => {
         console.log(error.response);
@@ -51,47 +67,11 @@ class App extends Component{
 
   render (){
     let content
-    const details = [
-      {
-        id: "1",
-        title: "Bonafide Title",
-        description: "Bonafide Description",
-        supportingDocumentsLink: "https://yournamedoesntmatter",
-        documentLink: "https://uaresmelly",
-        status: "0",
-        comments: "u are not nice",
-      },
-      {
-        id: "2",
-        title: "Bonafide Title",
-        description: "Bonafide Description",
-        supportingDocumentsLink: "https://yournamedoesntmatter",
-        documentLink: "https://uaresmelly",
-        status: "1",
-        comments: "u are not nice",
-      },
-      {
-        id: "2",
-        title: "Bonafide Title",
-        description: "Bonafide Description",
-        supportingDocumentsLink: "https://yournamedoesntmatter",
-        documentLink: "https://uaresmelly",
-        status: "2",
-        comments: "u are not nice",
-      },
-      {
-        id: "2",
-        title: "Bonafide Title",
-        description: "Bonafide Description",
-        supportingDocumentsLink: "https://yournamedoesntmatter",
-        documentLink: "https://uaresmelly",
-        status: "3",
-        comments: "u are not nice",
-      }]
+    
     if(!this.state.search){
       content = <Skeleton active></Skeleton>
     }else{
-      content = <div>{details.map((item) => {
+      content = <div>{this.state.phoneDetails.map((item) => {
         return (
           <Row style={{ justifyContent: "center" }}>
             <Card
